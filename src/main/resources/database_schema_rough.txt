@@ -1,0 +1,61 @@
+CREATE TABLE card_subtype(card_subtype_id INTEGER PRIMARY KEY ASC NOT NULL, card_subtype TEXT);
+
+CREATE TABLE faction(faction_id INTEGER PRIMARY KEY ASC NOT NULL, faction TEXT, corporation INT);
+INSERT INTO faction
+(faction, corporation)
+VALUES
+("Neutral - Corporation", 1),
+("Neutral - Runner", 0),
+("Anarch", 0),
+("Shaper", 0),
+("Criminal", 0),
+("NBN", 1),
+("Weyland Consortium", 1),
+("Hass-Bioroid", 1),
+("Jinteki", 1),
+("Apex", 0),
+("Sunny Lebeau", 0),
+("Adam", 0);
+
+
+CREATE TABLE card_type(card_type_id INTEGER PRIMARY KEY ASC NOT NULL, card_type TEXT);
+INSERT INTO card_type
+(card_type)
+VALUES
+("ICE"),
+("Upgrade"),
+("Asset"),
+("Operation"),
+("Agenda"),
+("Event"),
+("Program"),
+("Hardware"),
+("Resource");
+
+CREATE TABLE card(card_id INTEGER PRIMARY KEY ASC NOT NULL, card_name TEXT, influence INT, desc TEXT, card_type_id,
+faction_id, isunique INT, maxlimit INT, cost INT,
+FOREIGN KEY(card_type_id) REFERENCES card_type(card_type_id),
+FOREIGN KEY(faction_id) REFERENCES faction(faction_id));
+
+CREATE TABLE agenda_points(card_id ASC NOT NULL, points,
+FOREIGN KEY(card_id) REFERENCES card(card_id)
+);
+
+CREATE TABLE card_card_subtype(card_id ASC NOT NULL, card_subtype_id,
+FOREIGN KEY(card_id) REFERENCES card(card_id),
+FOREIGN KEY(card_subtype_id) REFERENCES card_subtype(card_subtype_id));
+
+CREATE TABLE subroutine(subroutine_id INTEGER PRIMARY KEY ASC NOT NULL, desc TEXT, effect TEXT);
+
+CREATE TABLE effect(card_id ASC NOT NULL, effect TEXT,
+FOREIGN KEY(card_id) REFERENCES card(card_id));
+
+CREATE TABLE card_subroutine(card_id ASC NOT NULL, subroutine_id,
+FOREIGN KEY(card_id) REFERENCES card(card_id),
+FOREIGN KEY(subroutine_id) REFERENCES subroutine(subroutine_id));
+
+CREATE TABLE runner(runner_id INTEGER PRIMARY KEY ASC NOT NULL, name TEXT, minlimit INT, maxinfluence INT, desc TEXT, baselink INT, effect TEXT
+);
+
+CREATE TABLE corporation(corporation_id INTEGER PRIMARY KEY ASC NOT NULL, name TEXT, minlimit INT, maxinfluence INT, description TEXT, effect TEXT
+);
